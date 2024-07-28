@@ -19,7 +19,16 @@ const App = () => {
   }
 
   const addNewTodo = (name) => {
-    alert(`Call me ${name}`)
+    const newToto = {
+      id: randomIntFromInterval(1, 1000000),
+      name
+    }
+
+    setTodoList([...todoList, newToto]);
+  }
+
+  const randomIntFromInterval = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   return (
