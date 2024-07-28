@@ -27,9 +27,6 @@ const TodoNew = (props) => {
             <button style={{ cursor: "pointer" }}
                 onClick={handlerClick}
             >Add</button>
-            <div>
-                My text input is = {valueInput}
-            </div>
         </div>
     )
 }
