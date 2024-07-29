@@ -1,4 +1,4 @@
-import { Button, Input, notification } from "antd";
+import { Button, Input, Modal, notification } from "antd";
 import { useState } from "react";
 import { createUserAPI } from "../../services/api.service";
 
@@ -8,7 +8,9 @@ const UserForm = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
 
-  const handleClickButton = async () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmitButton = async () => {
     const res = await createUserAPI(fullName, email, password, phone);
 
     if (res.data) {
@@ -16,6 +18,7 @@ const UserForm = () => {
         message: "Create user",
         description: "Tạo user thành công",
       });
+      setIsModalOpen(false);
     } else {
       notification.error({
         message: "Create user",
@@ -26,7 +29,26 @@ const UserForm = () => {
 
   return (
     <div className="user-form">
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "30px",
+        }}
+      >
+        <h3>Table Users</h3>
+        <Button onClick={() => setIsModalOpen(true)} type="primary">
+          Create User
+        </Button>
+      </div>
+      <Modal
+        title="Create User"
+        open={isModalOpen}
+        onOk={() => handleSubmitButton()}
+        onCancel={() => setIsModalOpen(false)}
+        maskClosable={false}
+        okText="Create"
+      >
         <div>
           <span>Full Name</span>
           <Input
@@ -66,12 +88,7 @@ const UserForm = () => {
             }}
           />
         </div>
-        <div>
-          <Button onClick={handleClickButton} type="primary">
-            Submit
-          </Button>
-        </div>
-      </div>
+      </Modal>
     </div>
   );
 };
