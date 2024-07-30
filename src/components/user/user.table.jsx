@@ -90,7 +90,7 @@ const UserTable = (props) => {
         setDataUpdate={setDataUpdate}
         loadUser={loadUser}
       />
-      <DetailUserDrawer open={open} onClose={onClose} dataDetail={dataDetail} />
+      <DetailUserDrawer open={open} onClose={onClose} dataDetail={dataDetail} setOpen={setOpen} loadUser={loadUser} />
     </>
   );
 };
