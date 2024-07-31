@@ -32,13 +32,9 @@ const UserTable = (props) => {
 
   const columns = [
     {
-      title:"STT",
+      title: "STT",
       render: (_, record, index) => {
-        return (
-          <>
-            {index + 1}
-          </>
-        );
+        return <>{index + 1}</>;
       },
     },
     {
@@ -92,7 +88,26 @@ const UserTable = (props) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={dataUsers} rowKey={"_id"} />;
+      <Table
+        columns={columns}
+        dataSource={dataUsers}
+        rowKey={"_id"}
+        pagination={{
+          current: 1,
+          pageSize: 10,
+          showSizeChanger: true,
+          total: 99,
+          showTotal: (total, range) => {
+            return (
+              <div>
+                {" "}
+                {range[0]}-{range[1]} trên {total} rows
+              </div>
+            );
+          },
+        }}
+      />
+      ;
       <UpdateUserModal
         isModalUpdateOpen={isModalUpdateOpen}
         setIsModalUpdateOpen={setIsModalUpdateOpen}
@@ -100,7 +115,13 @@ const UserTable = (props) => {
         setDataUpdate={setDataUpdate}
         loadUser={loadUser}
       />
-      <DetailUserDrawer open={open} onClose={onClose} dataDetail={dataDetail} setOpen={setOpen} loadUser={loadUser} />
+      <DetailUserDrawer
+        open={open}
+        onClose={onClose}
+        dataDetail={dataDetail}
+        setOpen={setOpen}
+        loadUser={loadUser}
+      />
     </>
   );
 };
