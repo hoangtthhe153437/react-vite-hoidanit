@@ -1,13 +1,12 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { Table, Popconfirm, notification } from "antd";
 import UpdateUserModal from "./update.user.modal";
 import DetailUserDrawer from "./detail.user.drawer";
 import { deleteUserAPI } from "../../services/api.service";
 import { useState } from "react";
-import { Popconfirm, notification } from "antd";
 
 const UserTable = (props) => {
-  const { dataUsers, loadUser } = props;
+  const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize } = props;
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
   const [dataDetail, setDataDetail] = useState(null);
@@ -34,7 +33,7 @@ const UserTable = (props) => {
     {
       title: "STT",
       render: (_, record, index) => {
-        return <>{index + 1}</>;
+        return <>{(index + 1) + (current - 1) * pageSize}</>;
       },
     },
     {
@@ -86,6 +85,25 @@ const UserTable = (props) => {
     },
   ];
 
+  const onChange = (pagination, filters, sorter, extra) => {
+
+    //neu thay doi trang : current
+    if (pagination && pagination.current) {
+      if (+pagination.current !== +current) {
+        setCurrent(+pagination.current);
+      }
+    }
+
+    //neu thay doi tong so phan tu : pageSize
+    if (pagination && pagination.pageSize) {
+      if (+pagination.pageSize !== +pageSize) {
+        setPageSize(+pagination.pageSize);
+      }
+    }
+
+    console.log("params ss", pagination, filters, sorter, extra);
+  }
+
   return (
     <>
       <Table
@@ -93,10 +111,10 @@ const UserTable = (props) => {
         dataSource={dataUsers}
         rowKey={"_id"}
         pagination={{
-          current: 1,
-          pageSize: 10,
+          current: current,
+          pageSize: pageSize,
           showSizeChanger: true,
-          total: 99,
+          total: total,
           showTotal: (total, range) => {
             return (
               <div>
@@ -106,6 +124,7 @@ const UserTable = (props) => {
             );
           },
         }}
+        onChange={onChange}
       />
       ;
       <UpdateUserModal
