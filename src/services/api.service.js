@@ -70,6 +70,11 @@ const getAccountAPI = () => {
   return axios.get(URL_BACKEND);
 };
 
+const logoutAPI = () => {
+    const URL_BACKEND = "/api/v1/auth/logout";
+    return axios.post(URL_BACKEND);
+  };
+
 const handleUploadFile = (file, folder) => {
   const URL_BACKEND = `/api/v1/file/upload`;
   let config = {
@@ -93,5 +98,6 @@ export {
   updateUserAvatarAPI,
   registerUserAPI,
   loginAPI,
-  getAccountAPI
+  getAccountAPI,
+  logoutAPI
 };
