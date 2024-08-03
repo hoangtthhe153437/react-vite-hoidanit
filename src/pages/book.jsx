@@ -1,9 +1,38 @@
 import { useEffect, useState } from "react";
 import BookTable from "../components/book/book.table";
 import { fetchAllBookAPI } from "../services/api.service";
-import { Button, notification } from "antd";
+import { Button, notification, Modal } from "antd";
+import BookCreate from "../components/book/book.create";
 
 const BookPage = () => {
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [total, setTotal] = useState(0);
+  const [dataBooks, setDataBooks] = useState([]);
+  // Book Create
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    loadBooks();
+  }, [current, pageSize]);
+
+  const loadBooks = async () => {
+    const res = await fetchAllBookAPI(current, pageSize);
+    if (res.data && res.data.result) {
+      setTotal(res.data.meta.total);
+      setCurrent(res.data.meta.current);
+      setDataBooks(res.data.result);
+    } else {
+      notification.error({
+        message: "Lỗi",
+        description: "Không thể lấy dữ liệu sách",
+      });
+    }
+  };
+
   return (
     <>
       <div
@@ -15,10 +44,18 @@ const BookPage = () => {
         }}
       >
         <h1>Book Table</h1>
-        <Button type="primary">Create book</Button>
+        <Button type="primary" onClick={showModal}>Create book</Button>
       </div>
       <BookTable
+        dataBooks={dataBooks}
+        current={current}
+        pageSize={pageSize}
+        total={total}
+        setCurrent={setCurrent}
+        setPageSize={setPageSize}
+        loadBooks={loadBooks}
       />
+      <BookCreate isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} loadBooks={loadBooks} />
     </>
   );
 };

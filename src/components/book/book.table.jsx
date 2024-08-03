@@ -3,30 +3,20 @@ import { notification, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllBookAPI } from "../../services/api.service";
+import BookDetail from "./book.detail";
 
 const BookTable = (props) => {
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [dataBooks, setDataBooks] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [bookDetail, setBookDetail] = useState({}); //state to store book detail
 
-  useEffect(() => {
-    loadBooks();
-  }, [current, pageSize]);
-
-  const loadBooks = async () => {
-    const res = await fetchAllBookAPI(current, pageSize);
-    if (res.data && res.data.result) {
-      setTotal(res.data.meta.total);
-      setCurrent(res.data.meta.current);
-      setDataBooks(res.data.result);
-    } else {
-      notification.error({
-        message: "Lỗi",
-        description: "Không thể lấy dữ liệu sách",
-      });
-    }
+  const { dataBooks, current, pageSize, total, setCurrent, setPageSize, loadBooks } = props;
+  const showDrawer = () => {
+    setOpen(true);
   };
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const columns = [
     {
       title: "STT",
@@ -35,7 +25,12 @@ const BookTable = (props) => {
     {
       title: "Id",
       key: "id",
-      render: (_, record) => <a>{record._id}</a>,
+      render: (_, record) => <a onClick={
+        () => {
+          setBookDetail(record);
+          showDrawer();
+        }
+      }>{record._id}</a>,
     },
     {
       title: "Tiêu đề",
@@ -123,7 +118,7 @@ const BookTable = (props) => {
           }}
           onChange={onChange}
         />
-        ;
+        <BookDetail open={open} onClose={onClose} bookDetail={bookDetail} loadBooks={loadBooks} setOpen={setOpen} />
       </div>
     </>
   );

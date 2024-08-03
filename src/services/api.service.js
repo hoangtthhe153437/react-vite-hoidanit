@@ -11,6 +11,21 @@ const createUserAPI = (fullName, email, password, phone) => {
   return axios.post(URL_BACKEND, data);
 };
 
+
+const createBookAPI = (thumbnail, mainText, author, price, quantity, category) => {
+  const URL_BACKEND = "/api/v1/book";
+  const data = {
+    thumbnail: thumbnail,
+    mainText: mainText,
+    author: author,
+    price: price,
+    quantity: quantity,
+    category: category,
+  };
+  return axios.post(URL_BACKEND, data);
+};
+
+
 const updateUserAPI = (_id, fullName, phone) => {
   const URL_BACKEND = "/api/v1/user";
   const data = {
@@ -31,6 +46,16 @@ const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
   };
   return axios.put(URL_BACKEND, data);
 };
+
+const updateBookThumbnailAPI = (_id, thumbnail) => {
+  const URL_BACKEND = "/api/v1/book";
+  const data = {
+    _id: _id,
+    thumbnail: thumbnail,
+  };
+  return axios.put(URL_BACKEND, data);
+};
+
 
 const fetchAllUserAPI = (current, pageSize) => {
   const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
@@ -105,5 +130,7 @@ export {
   loginAPI,
   getAccountAPI,
   logoutAPI,
-  fetchAllBookAPI
+  fetchAllBookAPI,
+  updateBookThumbnailAPI,
+  createBookAPI
 };
